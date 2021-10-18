@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "mcyt_hearts",
+  "version": "${version}",
+  "name": "Mcyt_hearts",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/mcyt_hearts/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "mcyt_hearts.mcyt_hearts.client.Mcyt_heartsClient"
+    ],
+    "main": [
+      "mcyt_hearts.mcyt_hearts.Mcyt_hearts"
+    ]
+  },
+  "mixins": [
+    "mcyt_hearts.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.2",
+    "fabric": "*",
+    "minecraft": "1.17.1"
+  }
+}
