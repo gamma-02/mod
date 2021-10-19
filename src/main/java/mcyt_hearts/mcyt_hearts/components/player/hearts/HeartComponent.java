@@ -17,12 +17,15 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
 {
     public static final ComponentKey<HeartComponent> HEART_COMPONENT = ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier("mod", "heart"), HeartComponent.class);
 
-    private HashMap<Integer, Heart> hearts = new HashMap<>();
+    private HashMap<Integer, String> hearts = new HashMap<>();
     int numNBT;
+    boolean joined = false;
 
-    public static HeartComponent getHearts(PlayerEntity entity)
+
+
+    public Identifier getHeart(int index)
     {
-        return HEART_COMPONENT.get(entity);
+        return new Identifier("mod", hearts.get(index));
     }
 
     public int size(){
@@ -32,9 +35,12 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     @Override public void addHeart(Heart heart)
     {
 
-        if(hearts.size()<=10 && moreThanTwo(heart))
+        if(hearts.size()<=9 && moreThanTwo(heart))
         {
-            hearts.put((hearts.size() - 1), heart);
+            hearts.put((1+hearts.size()), Registry.ITEM.getId(heart).getPath());
+            System.out.println("success");
+        }else{
+            System.out.println("fail");
         }
     }
 
@@ -43,15 +49,25 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
         return hearts.isEmpty();
     }
 
+    @Override public Boolean hasJoined()
+    {
+        return joined;
+    }
+
+    @Override public void setJoined()
+    {
+        this.joined = true;
+    }
+
     @Override public void readFromNbt(NbtCompound tag)
     {
         for(int l = 0; l<numNBT; l++){
-            String namespace = tag.getString("namespace"+l);
             String path = tag.getString("path"+l);
-            Identifier id = new Identifier(namespace, path);
+            Identifier id = new Identifier("mod", path);
             Heart heart = (Heart) Registry.ITEM.getOrEmpty(id).get();
-            hearts.put(l,heart);
+            hearts.put(l,Registry.ITEM.getId(heart).getPath());
         }
+        this.joined = tag.getBoolean("joined");
 
     }
 
@@ -59,11 +75,11 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     {
         int k = 0;
         for(k = 0; k< hearts.size();k++){
-            Identifier id = Registry.ITEM.getId(hearts.get(k));
-            tag.putString("namespace"+k, id.getNamespace());
+            Identifier id = new Identifier("mod", hearts.get(k));
             tag.putString("path"+k, id.getPath());
         }
         numNBT = k;
+        tag.putBoolean("joined", joined);
 
     }
 
@@ -74,7 +90,7 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     private boolean moreThanTwo(Heart heart){
         int k = 0;
         for(int l = 0; l<hearts.size(); l++){
-            if(hearts.get(l) == heart){
+            if(hearts.get(l) == Registry.ITEM.getId(heart).getPath()){
                 k++;
             }
         }

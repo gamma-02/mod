@@ -20,6 +20,11 @@
       "mcyt_hearts.mcyt_hearts.components.player.hearts.HeartComponent"
     ]
   },
+  "custom": {
+    "cardinal-components": [
+      "mod:heart"
+    ]
+  },
   "mixins": [
     "mcyt_hearts.mixins.json"
   ],
@@ -28,4 +33,4 @@
     "fabric": "*",
     "minecraft": "1.17.1"
   }
-}
+},

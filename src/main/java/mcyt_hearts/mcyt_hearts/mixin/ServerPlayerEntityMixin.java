@@ -1,6 +1,8 @@
 package mcyt_hearts.mcyt_hearts.mixin;
 
 import com.mojang.authlib.GameProfile;
+import mcyt_hearts.mcyt_hearts.item_objects.Heart;
+import mcyt_hearts.mcyt_hearts.items;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -9,13 +11,18 @@ import mcyt_hearts.mcyt_hearts.components.player.hearts.HeartComponent;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity
 {
+    @Shadow public abstract void sendAbilitiesUpdate();
+
     public ServerPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile)
     {
         super(world, blockPos, f, gameProfile);
@@ -23,20 +30,41 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
     private int lastHearts;
 
+    private boolean joined = false;
+
+
+
+    @Inject(method = ("onSpawn()V"), at = @At("HEAD"))
+    public void spawnMixin(CallbackInfo ci){
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(2);
+        this.sendAbilitiesUpdate();
+        System.out.println("Eeeeeeeerrrrgggggghh");
+        this.setHealth(2f);
+    }
+
 
     @Inject(method = ("tick"), at = @At("HEAD"))
-    public void tickMixin(){
-        double health = this.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH);
+    public void tickMixin(CallbackInfo ci){
 
-        if(HeartComponent.HEART_COMPONENT.get(this).size()>lastHearts){
-            double eeee = health++;
-            this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(eeee);
-        }
+
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size()+1)*2);
+        this.sendAbilitiesUpdate();
+
+
+
+
+
+
+
+
 
 
 
 
         lastHearts = HeartComponent.HEART_COMPONENT.get(this).size();
+        if(!HeartComponent.HEART_COMPONENT.get(this).hasJoined()){
+            HeartComponent.HEART_COMPONENT.get(this).setJoined();
+        }
 
     }
 
