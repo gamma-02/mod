@@ -25,6 +25,10 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
         return HEART_COMPONENT.get(entity);
     }
 
+    public int size(){
+        return this.hearts.size();
+    }
+
     @Override public void addHeart(Heart heart)
     {
 

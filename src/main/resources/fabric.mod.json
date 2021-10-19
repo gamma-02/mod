@@ -17,7 +17,7 @@
       "mcyt_hearts.mcyt_hearts.Mcyt_hearts"
     ],
     "cardinal-components-entity": [
-      "mcyt_hearts.mcyt_hearts.components.player.HeartComponent"
+      "mcyt_hearts.mcyt_hearts.components.player.hearts.HeartComponent"
     ]
   },
   "mixins": [
