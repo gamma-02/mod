@@ -1,5 +1,6 @@
 package mcyt_hearts.mcyt_hearts;
 
+import mcyt_hearts.mcyt_hearts.item_objects.TechnoHeart;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
@@ -27,7 +28,7 @@ public class items {
 
 
     public static final Item DREAM_HEART = new Item(new FabricItemSettings().group(creativeModGroup));
-    public static final Item TECHNO_HEART = new Item(new FabricItemSettings().group(creativeModGroup));
+    public static final Item TECHNO_HEART = new TechnoHeart(new FabricItemSettings().group(creativeModGroup));
     public static final Item TOMMY_HEART = new Item(new FabricItemSettings().group(creativeModGroup));
     public static final Item GEORGE_HEART = new Item(new FabricItemSettings().group(creativeModGroup));
     public static final Item APHMAU_HEART = new Item(new FabricItemSettings().group(creativeModGroup));
