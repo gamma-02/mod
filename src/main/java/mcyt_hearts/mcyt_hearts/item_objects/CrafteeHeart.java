@@ -16,6 +16,11 @@ public class CrafteeHeart extends Heart
         super(settings);
     }
     @Override
+    public boolean isUsedOnRelease(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public UseAction getUseAction(ItemStack stack) {
         return UseAction.EAT;
     }
@@ -25,10 +30,12 @@ public class CrafteeHeart extends Heart
     }
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if(user instanceof PlayerEntity){
+        if(remainingUseTicks<=10)
+        {
             HeartComponent.HEART_COMPONENT.get(user).addHeart(this);
             this.use(world, (PlayerEntity) user, user.getActiveHand());
         }
+
     }
 
     @Override

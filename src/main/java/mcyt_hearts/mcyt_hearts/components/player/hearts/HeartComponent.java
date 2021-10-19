@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -32,12 +33,12 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
         return this.hearts.size();
     }
 
-    @Override public void addHeart(Heart heart)
+    @Override public void addHeart(Identifier heart)
     {
 
         if(hearts.size()<=9 && moreThanTwo(heart))
         {
-            hearts.put((1+hearts.size()), Registry.ITEM.getId(heart).getPath());
+            hearts.put((1+hearts.size()), heart.getPath());
             System.out.println("success");
         }else{
             System.out.println("fail");
@@ -75,6 +76,7 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     {
         int k = 0;
         for(k = 0; k< hearts.size();k++){
+            @NotNull
             Identifier id = new Identifier("mod", hearts.get(k));
             tag.putString("path"+k, id.getPath());
         }
@@ -87,10 +89,10 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     {
         registry.registerForPlayers(HEART_COMPONENT, player -> new HeartComponent(), RespawnCopyStrategy.NEVER_COPY);
     }
-    private boolean moreThanTwo(Heart heart){
+    private boolean moreThanTwo(Identifier heart){
         int k = 0;
         for(int l = 0; l<hearts.size(); l++){
-            if(hearts.get(l) == Registry.ITEM.getId(heart).getPath()){
+            if(hearts.get(l) ==heart.getPath()){
                 k++;
             }
         }

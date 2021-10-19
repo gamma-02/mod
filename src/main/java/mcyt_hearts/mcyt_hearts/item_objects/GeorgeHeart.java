@@ -4,6 +4,7 @@ import mcyt_hearts.mcyt_hearts.components.player.hearts.HeartComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -14,6 +15,10 @@ public class GeorgeHeart extends Heart
     public GeorgeHeart(Settings settings)
     {
         super(settings);
+    }
+    @Override
+    public boolean isUsedOnRelease(ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -26,10 +31,12 @@ public class GeorgeHeart extends Heart
     }
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if(user instanceof PlayerEntity){
+        if(remainingUseTicks<=10)
+        {
             HeartComponent.HEART_COMPONENT.get(user).addHeart(this);
             this.use(world, (PlayerEntity) user, user.getActiveHand());
         }
+
     }
 
     @Override

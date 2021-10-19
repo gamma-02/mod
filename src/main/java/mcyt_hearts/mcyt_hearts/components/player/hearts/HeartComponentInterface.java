@@ -9,7 +9,7 @@ import org.lwjgl.system.CallbackI;
 public interface HeartComponentInterface extends Component {
 
     public Identifier getHeart(int index);
-    void addHeart(Heart heart);
+    void addHeart(Identifier heart);
     public Boolean hasHeart(Heart heart);
     public Boolean hasJoined();
     public void setJoined();

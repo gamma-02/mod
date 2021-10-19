@@ -16,25 +16,14 @@ public class AphmauHeart extends Heart
         super(settings);
     }
 
-    @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.EAT;
-    }
-    @Override
-    public int getMaxUseTime(ItemStack stack) {
-        return 20;
-    }
-    @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if(user instanceof PlayerEntity){
-            HeartComponent.HEART_COMPONENT.get(user).addHeart(this);
-            this.use(world, (PlayerEntity) user, user.getActiveHand());
-        }
-    }
+
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-        return TypedActionResult.consume(user.getActiveItem());
+        HeartComponent.HEART_COMPONENT.get(user).addHeart(this);
+        System.out.println("eeeeeee");
+        user.getActiveItem().decrement(1);
+        return TypedActionResult.pass(user.getActiveItem());
     }
 }
