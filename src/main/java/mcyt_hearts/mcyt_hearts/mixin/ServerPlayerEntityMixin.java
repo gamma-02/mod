@@ -70,8 +70,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     @Inject(method = ("tick"), at = @At("HEAD"))
     public void tickMixin(CallbackInfo ci){
 
-
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size()+1)*2);
+        if(!(HeartComponent.HEART_COMPONENT.get(this).getHeart(1).getPath().equals("null_heart"))) {
+            this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)
+                    .setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size() + 1) * 2);
+        }
 
         for(int i = 0; i<HeartComponent.HEART_COMPONENT.get(this).size()+1;i++){
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "george_heart" ){
@@ -87,13 +89,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                     this.heal(1.0F);
                 }
             }else{
-                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED.getDefaultValue());
+                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "tommy_heart"){
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getValue()+0.1);
                 this.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1,1,true,false));
             }else{
-                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED.getDefaultValue());
+                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" ){
                 this.isInvulnerableTo(DamageSource.IN_FIRE);
@@ -145,9 +147,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 Explosion ex = world.createExplosion(tnt, this.getX(), this.getY(), this.getZ(), 4f, Explosion.DestructionType.DESTROY);
                 this.isInvulnerableTo(DamageSource.explosion(ex));
             }
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" && (source.getAttacker().getType() == EntityType.BLAZE || source.getAttacker().getType() == EntityType.MAGMA_CUBE || source.getAttacker().getType().equals(EntityType.GHAST))){
-                this.isInvulnerableTo(source);
-            }
+            if(source.getAttacker() != null)
+                if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" && (source.getAttacker().getType() == EntityType.BLAZE || source.getAttacker().getType() == EntityType.MAGMA_CUBE || source.getAttacker().getType().equals(EntityType.GHAST)) || source.getAttacker().getType().equals(EntityType.FIREBALL) || source.getAttacker().getType().equals(EntityType.SMALL_FIREBALL))
+                {
+                    this.isInvulnerableTo(source);
+                }
 
 
 

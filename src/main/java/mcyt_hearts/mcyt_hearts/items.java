@@ -37,7 +37,6 @@ public class items {
     public static final Item CRAFTEE_HEART = new CrafteeHeart(new FabricItemSettings().group(creativeModGroup));
     public static final Item WISP_HEART = new WispHeart(new FabricItemSettings().group(creativeModGroup));
     public static final Item KARL_HEART = new KarlHeart(new FabricItemSettings().group(creativeModGroup));
-    public static final Item NULL_HEART = new BaseHeart(new FabricItemSettings());
 
 
     static {
@@ -51,7 +50,6 @@ public class items {
         add(CRAFTEE_HEART, "craftee_heart");
         add(WISP_HEART, "wisp_heart");
         add(KARL_HEART, "karl_heart");
-        add(NULL_HEART, "null_heart");
 
 
     }
