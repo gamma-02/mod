@@ -1,0 +1,4 @@
+accessWidener    v1    named
+accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
+accessible method net/minecraft/client/gui/hud/InGameHud drawHeart (Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/hud/InGameHud$HeartType;IIIZZ)V
+accessible method net/minecraft/client/render/OverlayTexture getU (F)I

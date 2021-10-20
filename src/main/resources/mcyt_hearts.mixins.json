@@ -4,9 +4,12 @@
   "package": "mcyt_hearts.mcyt_hearts.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "EntityMixin",
+    "LivingEntityMixin",
     "ServerPlayerEntityMixin"
   ],
   "client": [
+    "InGameGuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

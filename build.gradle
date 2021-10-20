@@ -13,7 +13,9 @@ repositories {
         url = 'https://ladysnake.jfrog.io/artifactory/mods'
     }
 }
-
+loom {
+    accessWidenerPath = file("src/main/resources/mcyt_hearts.accesswidener")
+}
 def includeCompile(group, artifact, version) {
     project.dependencies {
         modCompileOnly("$group:$artifact:$version") {

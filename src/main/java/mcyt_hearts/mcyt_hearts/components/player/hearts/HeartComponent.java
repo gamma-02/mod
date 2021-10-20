@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.system.CallbackI;
 
 import java.util.HashMap;
 
@@ -26,7 +27,11 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
 
     public Identifier getHeart(int index)
     {
-        return new Identifier("mod", hearts.get(index));
+        if(hearts.get(index) != null){
+            return new Identifier("mod", hearts.get(index));
+        }else{
+            return new Identifier("mod", "null_heart");
+        }
     }
 
     public int size(){
@@ -64,9 +69,9 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     {
         for(int l = 0; l<numNBT; l++){
             String path = tag.getString("path"+l);
-            Identifier id = new Identifier("mod", path);
-            Heart heart = (Heart) Registry.ITEM.getOrEmpty(id).get();
-            hearts.put(l,Registry.ITEM.getId(heart).getPath());
+            hearts.put(l,path);
+
+
         }
         this.joined = tag.getBoolean("joined");
 
@@ -75,12 +80,16 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     @Override public void writeToNbt(NbtCompound tag)
     {
         int k = 0;
+        int e = 0;
         for(k = 0; k< hearts.size();k++){
-            @NotNull
-            Identifier id = new Identifier("mod", hearts.get(k));
-            tag.putString("path"+k, id.getPath());
+            if(hearts.get(e)!=null){
+                tag.putString("path"+e, hearts.get(e));
+                e++;
+            }
+
         }
-        numNBT = k;
+
+        numNBT = e+1;
         tag.putBoolean("joined", joined);
 
     }
@@ -92,7 +101,7 @@ public class HeartComponent implements HeartComponentInterface, EntityComponentI
     private boolean moreThanTwo(Identifier heart){
         int k = 0;
         for(int l = 0; l<hearts.size(); l++){
-            if(hearts.get(l) ==heart.getPath()){
+            if(hearts.get(l) == heart.getPath()){
                 k++;
             }
         }

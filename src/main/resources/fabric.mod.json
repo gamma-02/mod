@@ -9,6 +9,7 @@
   "license": "MIT",
   "icon": "assets/mcyt_hearts/icon.png",
   "environment": "*",
+  "accessWidener": "mcyt_hearts.accesswidener",
   "entrypoints": {
     "client": [
       "mcyt_hearts.mcyt_hearts.client.Mcyt_heartsClient"
