@@ -88,8 +88,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 if (this.getHealth() < this.getMaxHealth() && this.age % 20 == 0) {
                     this.heal(1.0F);
                 }
-            }else{
-                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "tommy_heart"){
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getValue()+0.1);
@@ -103,7 +101,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 this.isInvulnerableTo(DamageSource.LAVA);
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "mrbeast_heart"){
-                if(ticks == 20){
+                if(ticks == 1200){
                     this.dropItem(getRandomItem());
                 }
             }
@@ -136,34 +134,14 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
         }
 
     }
-    @Inject(method = "damage", at = @At("HEAD"))
-    public void damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-        for(int i = 0; i<HeartComponent.HEART_COMPONENT.get(this).size()+1;i++) {
-            if (HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "karl_heart") {
-                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 10));
-            }
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "craftee_heart"){
-                TntEntity tnt = EntityType.TNT.create(world);
-                Explosion ex = world.createExplosion(tnt, this.getX(), this.getY(), this.getZ(), 4f, Explosion.DestructionType.DESTROY);
-                this.isInvulnerableTo(DamageSource.explosion(ex));
-            }
-            if(source.getAttacker() != null)
-                if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" && (source.getAttacker().getType() == EntityType.BLAZE || source.getAttacker().getType() == EntityType.MAGMA_CUBE || source.getAttacker().getType().equals(EntityType.GHAST)) || source.getAttacker().getType().equals(EntityType.FIREBALL) || source.getAttacker().getType().equals(EntityType.SMALL_FIREBALL))
-                {
-                    this.isInvulnerableTo(source);
-                }
 
-
-
-        }
-    }
 
 
     public ItemConvertible getRandomItem(){
         boolean yes=true;
         while(yes){
             Item item = Registry.ITEM.getRandom(new Random());
-            if(item.getRarity(item.getDefaultStack()) != Rarity.COMMON || item.equals(Items.DIAMOND) || item.equals(Items.NETHERITE_INGOT) || item.equals(Items.ENDER_PEARL)){
+            if(item.getRarity(item.getDefaultStack()) != Rarity.COMMON || item.equals(Items.DIAMOND) || item.equals(Items.NETHERITE_INGOT) || item.equals(Items.ENDER_PEARL) || item.equals(Items.ANCIENT_DEBRIS) || item.equals(Items.GOLD_INGOT) || item.equals(Items.GILDED_BLACKSTONE)){
                 return item;
             }
         }
