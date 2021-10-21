@@ -20,9 +20,14 @@ public class GeorgeHeart extends Heart
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-        HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod","george_heart"));
-        System.out.println("eeeeeee");
-        user.getActiveItem().decrement(1);
-        return TypedActionResult.pass(user.getActiveItem());
+        if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
+        {
+            HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "george_heart"));
+            System.out.println("eeeeeee");
+            user.getActiveItem().decrement(1);
+            return TypedActionResult.pass(user.getActiveItem());
+        }else {
+            return TypedActionResult.fail(user.getActiveItem());
+        }
     }
 }

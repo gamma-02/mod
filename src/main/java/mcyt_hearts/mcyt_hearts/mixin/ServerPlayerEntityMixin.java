@@ -71,13 +71,12 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     public void tickMixin(CallbackInfo ci){
 
         if(!(HeartComponent.HEART_COMPONENT.get(this).getHeart(1).getPath().equals("null_heart"))) {
-            this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)
-                    .setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size() + 1) * 2);
+            this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size() + 1) * 2);
         }
 
         for(int i = 0; i<HeartComponent.HEART_COMPONENT.get(this).size()+1;i++){
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "george_heart" ){
-                this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR_TOUGHNESS).setBaseValue(8);
+                this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR_TOUGHNESS).setBaseValue(10);
 
             }else{
                 this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR_TOUGHNESS).setBaseValue(0);
@@ -92,7 +91,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "tommy_heart"){
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getValue()+0.1);
                 this.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1,1,true,false));
-            }else{
+            }else if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() != "dream_heart"){
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" ){
@@ -104,6 +103,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 if(ticks == 1200){
                     this.dropItem(getRandomItem());
                 }
+                ticks++;
             }
 
 
@@ -145,7 +145,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 return item;
             }
         }
-        return null;
+        return null;//makes the compiler happy
 
     }
 

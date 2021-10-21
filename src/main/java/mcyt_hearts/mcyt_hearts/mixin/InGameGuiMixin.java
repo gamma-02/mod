@@ -50,6 +50,7 @@ public abstract class InGameGuiMixin extends DrawableHelper {
     }
     /**
      * @author gamma_02
+     * @reason only way lmao
      */
 
     @Environment(EnvType.CLIENT)
@@ -62,25 +63,25 @@ public abstract class InGameGuiMixin extends DrawableHelper {
         this.v = v;
         this.blinking = blinking;
         this.halfHeart = halfHeart;
-        if(heartIndex == 0 || type == InGameHud.HeartType.CONTAINER){
+        if(heartIndex == 0 || type == InGameHud.HeartType.CONTAINER){//draws first heart and empty containers
             this.drawTexture(matrices, x, y, type.getU(halfHeart, blinking), v, 9, 9);
         }else {
-            if(halfHeart){
-                this.drawTexture(matrices, x, y, type.getU(true, blinking), v,9, 9);
+            if(halfHeart){//draws my custom half hearts
+                this.drawTexture(matrices, x, y, type.getU(true, blinking), v,9, 9);//idk why this is still here? doesnt work without it tho :kek:
 
 
-                RenderSystem.setShaderTexture(0, new Identifier("mod", "textures/gui/"+HeartComponent.HEART_COMPONENT.get(this.getCameraPlayer()).getHeart(heartIndex).getPath()+".png"));
-                this.drawTexture(matrices, x, y, 9,0, 9, 9, 18, 9);
+                RenderSystem.setShaderTexture(0, new Identifier("mod", "textures/gui/"+HeartComponent.HEART_COMPONENT.get(this.getCameraPlayer()).getHeart(heartIndex).getPath()+".png"));//sets correct texture
+                this.drawTexture(matrices, x, y, 9,0, 9, 9, 18, 9);//draws heart
 
 
-            }else{
-                RenderSystem.setShaderTexture(0, new Identifier("mod", "textures/gui/"+HeartComponent.HEART_COMPONENT.get(this.getCameraPlayer()).getHeart(heartIndex).getPath()+".png"));
-                this.drawTexture(matrices, x, y, 0,0, 9, 9, 18, 9);
+            }else{//draws custom full hearts
+                RenderSystem.setShaderTexture(0, new Identifier("mod", "textures/gui/"+HeartComponent.HEART_COMPONENT.get(this.getCameraPlayer()).getHeart(heartIndex).getPath()+".png"));//sets correct texture
+                this.drawTexture(matrices, x, y, 0,0, 9, 9, 18, 9);//draws heart
 
             }
 
         }
 
-        RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+        RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);//sets texture back to the HUD icons atlas
     }
 }
