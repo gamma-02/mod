@@ -8,13 +8,16 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -29,6 +32,22 @@ import java.util.Objects;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     @Shadow protected abstract boolean tryUseTotem(DamageSource source);
+
+    @Shadow protected abstract float applyArmorToDamage(DamageSource source, float amount);
+
+    @Shadow protected abstract float applyEnchantmentsToDamage(DamageSource source, float amount);
+
+    @Shadow public abstract int getArmor();
+
+    @Shadow public abstract float getAbsorptionAmount();
+
+    @Shadow public abstract void setAbsorptionAmount(float amount);
+
+    @Shadow public abstract float getHealth();
+
+    @Shadow public abstract void setHealth(float health);
+
+    @Shadow public abstract DamageTracker getDamageTracker();
 
     protected LivingEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -50,7 +69,8 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     /**
-     * @author
+     * @author gamma_02
+     * @reason I can't modify the return value any other way
      */
     @Overwrite
     public boolean canTarget(LivingEntity target) {
@@ -60,6 +80,9 @@ public abstract class LivingEntityMixin extends Entity {
             {
                 if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getHeart(i).getPath(), "aphmau_heart"))
                 {
+                    return false;
+                }
+                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getHeart(i).getPath(), "preston_heart") && (this.getType() == EntityType.BLAZE || this.getType() == EntityType.MAGMA_CUBE || this.getType() == EntityType.GHAST)){
                     return false;
                 }
 
@@ -105,38 +128,10 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
     }
-    @Inject(method = "applyDamage", at = @At("HEAD"))
-    public void damageMixin(DamageSource source, float amount, CallbackInfo ci){
-        if(this.getType() != null)
-        {
-            if(this.getType().equals(EntityType.PLAYER))
-            {
-
-                for (int i = 0; i < HeartComponent.HEART_COMPONENT.get(this).size() + 1; i++)
-                {
-                    if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "karl_heart"))
-                    {
-                        world.getServer().getPlayerManager().getPlayer(this.getName().asString()).addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 10));
-                    }
-                    if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "craftee_heart"))
-                    {
-                        TntEntity tnt = EntityType.TNT.create(world);
-                        Explosion ex = world.createExplosion(tnt, this.getX(), this.getY(), this.getZ(), 4f, Explosion.DestructionType.DESTROY);
-                        this.isInvulnerableTo(DamageSource.explosion(ex));
-                    }
-                    if (source.getAttacker() != null)
-                        if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(),
-                                "preston_heart") && (source.getAttacker()
-                                .getType() == EntityType.BLAZE || source.getAttacker().getType() == EntityType.MAGMA_CUBE || source.getAttacker().getType()
-                                .equals(EntityType.GHAST)) || source.getAttacker().getType().equals(EntityType.FIREBALL) || source.getAttacker().getType()
-                                .equals(EntityType.SMALL_FIREBALL))
-                        {
-                            this.isInvulnerableTo(source);
-                        }
-
-                }
-            }
-        }
-    }
+    /**
+     * @author gamma_02
+     * @reason no other way that works /shrug
+     */
+    
 
 }

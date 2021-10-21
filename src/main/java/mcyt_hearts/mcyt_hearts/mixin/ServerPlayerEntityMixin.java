@@ -34,6 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 @Mixin(ServerPlayerEntity.class)
@@ -48,7 +49,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
         super(world, blockPos, f, gameProfile);
     }
 
-    private int lastHearts;
+    private float lastHearts;
 
     private boolean joined = false;
 
@@ -95,9 +96,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" ){
-                this.isInvulnerableTo(DamageSource.IN_FIRE);
-                this.isInvulnerableTo(DamageSource.ON_FIRE);
-                this.isInvulnerableTo(DamageSource.LAVA);
+                this.isFireImmune();
+
             }
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "mrbeast_heart"){
                 if(ticks == 1200){
@@ -105,6 +105,18 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
                 }
                 ticks++;
             }
+            if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "karl_heart") && this.getHealth() < lastHearts)
+            {
+                world.getServer().getPlayerManager().getPlayer(this.getName().asString()).addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200));
+            }
+            if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "craftee_heart") && this.getHealth() < lastHearts)
+            {
+                TntEntity tnt = EntityType.TNT.create(world);
+                this.setInvulnerable(true);
+                Explosion ex = world.createExplosion(tnt, this.getX(), this.getY()+1, this.getZ(), 2f, Explosion.DestructionType.DESTROY);
+                this.setInvulnerable(false);
+            }
+
 
 
 
@@ -128,7 +140,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
 
 
-        lastHearts = HeartComponent.HEART_COMPONENT.get(this).size();
+        lastHearts = this.getHealth();
         if(!HeartComponent.HEART_COMPONENT.get(this).hasJoined()){
             HeartComponent.HEART_COMPONENT.get(this).setJoined();
         }

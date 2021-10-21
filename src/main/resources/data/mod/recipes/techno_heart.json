@@ -8,35 +8,35 @@
   ],
   "key": {
     "0": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "1": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "2": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "3": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "4": {
       "item": "minecraft:glass"
     },
     "5": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "6": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "7": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     },
     "8": {
-      "item": "minecraft:magma_block"
+      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "mod:preston_heart",
+    "item": "mod:techno_heart",
     "count": 1
   }
 }

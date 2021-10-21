@@ -8,35 +8,35 @@
   ],
   "key": {
     "0": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "1": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "2": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "3": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "4": {
       "item": "minecraft:glass"
     },
     "5": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "6": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "7": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     },
     "8": {
-      "item": "minecraft:diamond"
+      "item": "minecraft:coal"
     }
   },
   "result": {
-    "item": "mod:mr_beast_heart",
+    "item": "mod:tommy_heart",
     "count": 1
   }
 }
