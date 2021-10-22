@@ -24,6 +24,7 @@ public class AphmauHeart extends Heart
     {
         if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
         {
+            HeartComponent.HEART_COMPONENT.get(user).setAphmau(true);
             HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "aphmau_heart"));
             System.out.println("eeeeeee");
             user.getActiveItem().decrement(1);

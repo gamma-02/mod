@@ -21,6 +21,7 @@ public class TommyHeart extends Heart
     {
         if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
         {
+            HeartComponent.HEART_COMPONENT.get(user).setTommy(true);
             HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "tommy_heart"));
             System.out.println("eeeeeee");
             user.getActiveItem().decrement(1);

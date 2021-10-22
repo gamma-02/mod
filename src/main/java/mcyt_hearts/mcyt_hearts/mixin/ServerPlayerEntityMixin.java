@@ -48,10 +48,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     @Shadow public abstract boolean isInvulnerableTo(DamageSource damageSource);
 
     @Shadow private boolean filterText;
-    public boolean tommy;
-    public boolean dream;
-    public boolean wisp;
-    public boolean techno;
+    public boolean tommy = HeartComponent.HEART_COMPONENT.get(this).getTommy();
+    public boolean dream = HeartComponent.HEART_COMPONENT.get(this).getDream();
+    public boolean wisp = HeartComponent.HEART_COMPONENT.get(this).getWisp();
+    public boolean techno = HeartComponent.HEART_COMPONENT.get(this).getTechno();
 
     public ServerPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile)
     {
@@ -86,31 +86,27 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
             this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size() + 1) * 2);
         }
 
-        for(int i = 0; i<HeartComponent.HEART_COMPONENT.get(this).size()+1;i++){
 
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "george_heart" && this.lastHearts>this.getHealth()){
+
+            if(HeartComponent.HEART_COMPONENT.get(this).getGeorge() && this.lastHearts>this.getHealth()){
                 DamageSource source = this.getRecentDamageSource();
                 if(source.getAttacker() != null) {
                     this.heal((this.lastHearts - this.getHealth()) / 2);
                 }
 
             }
-            this.dream = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "dream_heart";
-            this.tommy = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "tommy_heart";
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "mrbeast_heart"){
+            if(HeartComponent.HEART_COMPONENT.get(this).getMrbeast()){
                 if(this.ticks == 1200){
                     this.dropItem(getRandomItem());
                     this.ticks = -1;
                 }
                 this.ticks++;
             }
-            if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "karl_heart") && this.getHealth() < lastHearts)
+            if (HeartComponent.HEART_COMPONENT.get(this).getKarl() && this.getHealth() < lastHearts)
             {
                 world.getServer().getPlayerManager().getPlayer(this.getName().asString()).addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200));
             }
-            this.wisp = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "wisp_heart";
-            this.techno = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() ==  "techno_heart";
-            if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "craftee_heart") && this.getHealth() < lastHearts)
+            if (HeartComponent.HEART_COMPONENT.get(this).getCraftee() && this.getHealth() < lastHearts)
             {
                 TntEntity tnt = EntityType.TNT.create(world);
                 this.setInvulnerable(true);
@@ -121,7 +117,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
 
 
-        }
+
 
 
         if(this.techno){
@@ -168,9 +164,6 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
 
         lastHearts = this.getHealth();
-        if(!HeartComponent.HEART_COMPONENT.get(this).hasJoined()){
-            HeartComponent.HEART_COMPONENT.get(this).setJoined();
-        }
 
     }
 

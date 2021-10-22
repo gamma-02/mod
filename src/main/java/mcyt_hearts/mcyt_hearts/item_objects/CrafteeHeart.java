@@ -21,6 +21,7 @@ public class CrafteeHeart extends Heart
     {
         if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
         {
+            HeartComponent.HEART_COMPONENT.get(user).setCraftee(true);
             HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "craftee_heart"));
             System.out.println("eeeeeee");
             user.getActiveItem().decrement(1);

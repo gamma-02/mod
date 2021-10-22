@@ -22,6 +22,7 @@ public class TechnoHeart extends Heart
     {
         if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
         {
+            HeartComponent.HEART_COMPONENT.get(user).setTechno(true);
             HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "techno_heart"));
             System.out.println("eeeeeee");
             user.getActiveItem().decrement(1);

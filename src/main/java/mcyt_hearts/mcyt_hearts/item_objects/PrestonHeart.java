@@ -23,6 +23,7 @@ public class PrestonHeart extends Heart
     {
         if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
         {
+            HeartComponent.HEART_COMPONENT.get(user).setPreston(true);
             HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "preston_heart"));
             System.out.println("eeeeeee");
             user.getActiveItem().decrement(1);

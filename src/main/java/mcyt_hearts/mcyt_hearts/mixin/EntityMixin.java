@@ -24,11 +24,7 @@ public abstract class EntityMixin implements EntityLike
     @Overwrite
     public boolean isFireImmune(){
         if(this.getType() == EntityType.PLAYER){
-            for(int i = 0; i<HeartComponent.HEART_COMPONENT.get(this).size()+1;i++){
-                if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart"){
-                    return true;
-                }
-            }
+            return HeartComponent.HEART_COMPONENT.get(this).getPreston();
         }
         return this.getType().isFireImmune();
     }

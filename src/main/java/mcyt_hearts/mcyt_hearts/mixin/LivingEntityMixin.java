@@ -58,10 +58,8 @@ public abstract class LivingEntityMixin extends Entity {
     public void jumpMixin(CallbackInfo ci){
         if(this.getType().equals(EntityType.PLAYER)) {
             for (int i = 0; i < HeartComponent.HEART_COMPONENT.get(this).size() + 1; i++) {
-                if (HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath().equals("dream_heart")) {
+                if (HeartComponent.HEART_COMPONENT.get(this).getDream()) {
                     this.setVelocity(getVelocity().add(0, 1F, 0));
-                }else{
-                    this.setVelocity(getVelocity().add(0, 0, 0));
                 }
 
             }
@@ -79,11 +77,11 @@ public abstract class LivingEntityMixin extends Entity {
 
             for (int i = 0;i < HeartComponent.HEART_COMPONENT.get(target).size() + 1;i++)
             {
-                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getHeart(i).getPath(), "aphmau_heart") && target.getEntityWorld().getRegistryKey().equals(DimensionType.THE_END_REGISTRY_KEY))
+                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getAphmau(), "aphmau_heart") && !(target.getEntityWorld().getRegistryKey().equals(DimensionType.THE_END_REGISTRY_KEY)))
                 {
                     return false;
                 }
-                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getHeart(i).getPath(), "preston_heart") && (this.getType() == EntityType.BLAZE || this.getType() == EntityType.MAGMA_CUBE || this.getType() == EntityType.GHAST)){
+                if (HeartComponent.HEART_COMPONENT.get(target).getPreston() && (this.getType() == EntityType.BLAZE || this.getType() == EntityType.MAGMA_CUBE || this.getType() == EntityType.GHAST)){
                     return false;
                 }
 
@@ -129,7 +127,7 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
     }
-    /**
+    /*
      * @author gamma_02
      * @reason no other way that works /shrug
      */

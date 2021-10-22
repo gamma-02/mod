@@ -7,7 +7,7 @@
   "authors": [],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/mcyt_hearts/icon.png",
+  "icon": "assets/mod/textures/gui/techno_heart.png",
   "environment": "*",
   "accessWidener": "mcyt_hearts.accesswidener",
   "entrypoints": {
