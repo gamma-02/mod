@@ -3,3 +3,4 @@ accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
 accessible method net/minecraft/client/gui/hud/InGameHud drawHeart (Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/hud/InGameHud$HeartType;IIIZZ)V
 accessible method net/minecraft/client/render/OverlayTexture getU (F)I
 accessible method net/minecraft/server/PlayerManager getPlayer (Ljava/lang/String;)Lnet/minecraft/server/network/ServerPlayerEntity;
+accessible field net/minecraft/world/dimension/DimensionType THE_END Lnet/minecraft/world/dimension/DimensionType;

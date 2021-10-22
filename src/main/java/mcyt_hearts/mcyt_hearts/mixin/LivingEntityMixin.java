@@ -1,54 +1,23 @@
 package mcyt_hearts.mcyt_hearts.mixin;
 
 import mcyt_hearts.mcyt_hearts.components.player.hearts.HeartComponent;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.TntEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTracker;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.explosion.Explosion;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-    @Shadow protected abstract boolean tryUseTotem(DamageSource source);
-
-    @Shadow protected abstract float applyArmorToDamage(DamageSource source, float amount);
-
-    @Shadow protected abstract float applyEnchantmentsToDamage(DamageSource source, float amount);
-
-    @Shadow public abstract int getArmor();
-
-    @Shadow public abstract float getAbsorptionAmount();
-
-    @Shadow public abstract void setAbsorptionAmount(float amount);
-
-    @Shadow public abstract float getHealth();
-
-    @Shadow public abstract void setHealth(float health);
-
-    @Shadow public abstract DamageTracker getDamageTracker();
 
     protected LivingEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -56,13 +25,12 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "jump()V", at = @At("TAIL"))
     public void jumpMixin(CallbackInfo ci){
-        if(this.getType().equals(EntityType.PLAYER)) {
-            for (int i = 0; i < HeartComponent.HEART_COMPONENT.get(this).size() + 1; i++) {
-                if (HeartComponent.HEART_COMPONENT.get(this).getDream()) {
-                    this.setVelocity(getVelocity().add(0, 1F, 0));
-                }
-
+        if (this.getType().equals(EntityType.PLAYER)) {
+            if (HeartComponent.HEART_COMPONENT.get(this).getDream()) {
+                this.setVelocity(getVelocity().add(0, 0.9F, 0));
             }
+
+
         }
 
     }
@@ -77,7 +45,7 @@ public abstract class LivingEntityMixin extends Entity {
 
             for (int i = 0;i < HeartComponent.HEART_COMPONENT.get(target).size() + 1;i++)
             {
-                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getAphmau(), "aphmau_heart") && !(target.getEntityWorld().getRegistryKey().equals(DimensionType.THE_END_REGISTRY_KEY)))
+                if (HeartComponent.HEART_COMPONENT.get(target).getAphmau() && !(target.getEntityWorld().getDimension().equals(DimensionType.THE_END)))
                 {
                     return false;
                 }
@@ -127,10 +95,5 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
     }
-    /*
-     * @author gamma_02
-     * @reason no other way that works /shrug
-     */
-    
 
 }
