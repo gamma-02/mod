@@ -22,7 +22,7 @@ public class WispHeart extends Heart
         if(HeartComponent.HEART_COMPONENT.get(user).size()<11)
         {
             HeartComponent.HEART_COMPONENT.get(user).addHeart(new Identifier("mod", "wisp_heart"));
-            System.out.println("eeeeeee");
+            System.out.println("AGHJWEAHJNKAFEJHKLAEFSWJKHAFWEKGHBJAFSEGHJKAFEWHJKAEFR");
             user.getActiveItem().decrement(1);
             return TypedActionResult.pass(user.getActiveItem());
         }else{

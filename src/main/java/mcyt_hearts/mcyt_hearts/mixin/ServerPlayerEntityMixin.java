@@ -20,12 +20,15 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stat;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.system.CallbackI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,6 +46,12 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     @Shadow public abstract void sendAbilitiesUpdate();
 
     @Shadow public abstract boolean isInvulnerableTo(DamageSource damageSource);
+
+    @Shadow private boolean filterText;
+    public boolean tommy;
+    public boolean dream;
+    public boolean wisp;
+    public boolean techno;
 
     public ServerPlayerEntityMixin(World world, BlockPos blockPos, float f, GameProfile gameProfile)
     {
@@ -71,44 +80,36 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
     @Inject(method = ("tick"), at = @At("HEAD"))
     public void tickMixin(CallbackInfo ci){
 
+
+
         if(!(HeartComponent.HEART_COMPONENT.get(this).getHeart(1).getPath().equals("null_heart"))) {
             this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue((HeartComponent.HEART_COMPONENT.get(this).size() + 1) * 2);
         }
 
         for(int i = 0; i<HeartComponent.HEART_COMPONENT.get(this).size()+1;i++){
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "george_heart" ){
-                this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR_TOUGHNESS).setBaseValue(10);
 
-            }else{
-                this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR_TOUGHNESS).setBaseValue(0);
-
-            }
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "dream_heart"){
-                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(1d);
-                if (this.getHealth() < this.getMaxHealth() && this.age % 20 == 0) {
-                    this.heal(1.0F);
+            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "george_heart" && this.lastHearts>this.getHealth()){
+                DamageSource source = this.getRecentDamageSource();
+                if(source.getAttacker() != null) {
+                    this.heal((this.lastHearts - this.getHealth()) / 2);
                 }
-            }
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "tommy_heart"){
-                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getValue()+0.1);
-                this.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 1,1,true,false));
-            }else if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() != "dream_heart"){
-                this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
-            }
-            if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "preston_heart" ){
-                this.isFireImmune();
 
             }
+            this.dream = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "dream_heart";
+            this.tommy = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "tommy_heart";
             if(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "mrbeast_heart"){
-                if(ticks == 1200){
+                if(this.ticks == 1200){
                     this.dropItem(getRandomItem());
+                    this.ticks = -1;
                 }
-                ticks++;
+                this.ticks++;
             }
             if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "karl_heart") && this.getHealth() < lastHearts)
             {
                 world.getServer().getPlayerManager().getPlayer(this.getName().asString()).addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200));
             }
+            this.wisp = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() == "wisp_heart";
+            this.techno = HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath() ==  "techno_heart";
             if (Objects.equals(HeartComponent.HEART_COMPONENT.get(this).getHeart(i).getPath(), "craftee_heart") && this.getHealth() < lastHearts)
             {
                 TntEntity tnt = EntityType.TNT.create(world);
@@ -120,11 +121,37 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity
 
 
 
-
-
-
-
         }
+
+
+        if(this.techno){
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 3, 1, true,true, true));
+        }
+
+
+
+        if(this.tommy){
+            this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 3,1,true,true, true));
+        }
+
+        if(this.dream){
+            this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(1d);
+            if (this.getHealth() < this.getMaxHealth() && this.age % 20 == 0) {
+                this.heal(1.0F);
+            }
+        }
+
+        if(!this.tommy && !this.dream){
+            this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
+        }
+
+        if(this.wisp){
+
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 3,1,true,true, true));
+            this.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 3, 1, true,true, true));
+        }
+
 
 
         this.sendAbilitiesUpdate();

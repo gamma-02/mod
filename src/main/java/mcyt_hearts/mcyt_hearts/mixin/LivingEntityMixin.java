@@ -17,6 +17,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import org.spongepowered.asm.mixin.Mixin;
@@ -78,7 +79,7 @@ public abstract class LivingEntityMixin extends Entity {
 
             for (int i = 0;i < HeartComponent.HEART_COMPONENT.get(target).size() + 1;i++)
             {
-                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getHeart(i).getPath(), "aphmau_heart"))
+                if (Objects.equals(HeartComponent.HEART_COMPONENT.get(target).getHeart(i).getPath(), "aphmau_heart") && target.getEntityWorld().getRegistryKey().equals(DimensionType.THE_END_REGISTRY_KEY))
                 {
                     return false;
                 }
